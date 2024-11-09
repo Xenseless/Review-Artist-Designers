@@ -20,8 +20,6 @@ body {
 .magazine-viewport .magazine {
     width: 922px;
     height: 600px;
-    left: -461px;
-    top: -300px;
 }
 
 /* Dimensiones para dispositivos móviles con ancho <= 680px */
@@ -29,12 +27,13 @@ body {
     .magazine-viewport .container {
         width: 360px;
         height: 220px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
     .magazine-viewport .magazine {
         width: 360px;
         height: 220px;
-        left: 0;
-        top: 0;
     }
     .magazine-viewport .page {
         width: 180px;
@@ -47,12 +46,13 @@ body {
     .magazine-viewport .container {
         width: 320px;
         height: 200px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
     .magazine-viewport .magazine {
         width: 320px;
         height: 200px;
-        left: 0;
-        top: 0;
     }
     .magazine-viewport .page {
         width: 160px;
