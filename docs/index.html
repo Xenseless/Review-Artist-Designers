@@ -35,10 +35,19 @@ function loadApp() {
     }
 
     // Function to set flipbook dimensions based on window width
-    function setFlipbookSize() {
-        const isMobile = window.innerWidth <= 680;
-        const width = isMobile ? 340 : 922;
-        const height = isMobile ? 210 : 600;
+function setFlipbookSize() {
+    let width, height;
+    
+    if (window.innerWidth <= 375) {   // Para dispositivos con ancho <= 375px
+        width = 320;
+        height = 200;
+    } else if (window.innerWidth <= 680) { // Para dispositivos entre 415px y 680px de ancho
+        width = 360;
+        height = 220;
+    } else { // Para dispositivos más grandes
+        width = 922;
+        height = 600;
+    }
 
         flipbook.turn('size', width, height);  // Adjust flipbook size dynamically
     }
