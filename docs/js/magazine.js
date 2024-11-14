@@ -25,6 +25,7 @@ function addPage(page, book) {
 function loadPage(page, pageElement) {
 
 	// Create an image element
+
 	var img = $('<img />');
 
 	img.mousedown(function(e) {
@@ -32,17 +33,21 @@ function loadPage(page, pageElement) {
 	});
 
 	img.load(function() {
+		
 		// Set the size
 		$(this).css({width: '100%', height: '100%'});
 
 		// Add the image to the page after loaded
+
 		$(this).appendTo(pageElement);
 
 		// Remove the loader indicator
+		
 		pageElement.find('.loader').remove();
 	});
 
 	// Load the page
+
 	img.attr('src', 'pages/' +  page + '.jpg');
 
 	loadRegions(page, pageElement);
@@ -50,6 +55,7 @@ function loadPage(page, pageElement) {
 }
 
 // Load regions
+
 function loadRegions(page, element) {
 
 	$.getJSON('pages/'+page+'-regions.json').
@@ -62,49 +68,63 @@ function loadRegions(page, element) {
 }
 
 // Load large page
+
 function loadLargePage(page, pageElement) {
+	
 	var img = $('<img />');
 
 	img.load(function() {
+
 		var prevImg = pageElement.find('img');
 		$(this).css({width: '100%', height: '100%'});
 		$(this).appendTo(pageElement);
 		prevImg.remove();
+		
 	});
 
-	// Load new page
+	// Loadnew page
+	
 	img.attr('src', 'pages/' +  page + '-large.jpg');
 }
 
 // Load small page
-function loadSmallPage(page, pageElement) {
-	var img = pageElement.find('img');
-	img.css({width: '100%', height: '100%'});
-	img.unbind('load');
 
-	// Load new page
+function loadSmallPage(page, pageElement) {
+	
+	var img = pageElement.find('img');
+
+	img.css({width: '100%', height: '100%'});
+
+	img.unbind('load');
+	// Loadnew page
+
 	img.attr('src', 'pages/' +  page + '.jpg');
 }
 
-// Chrome detection
+// http://code.google.com/p/chromium/issues/detail?id=128488
+
 function isChrome() {
+
 	return navigator.userAgent.indexOf('Chrome')!=-1;
+
 }
 
 function disableControls(page) {
-	if (page == 1)
-		$('.previous-button').hide();
-	else
-		$('.previous-button').show();
-
-	if (page == $('.magazine').turn('pages'))
-		$('.next-button').hide();
-	else
-		$('.next-button').show();
+		if (page==1)
+			$('.previous-button').hide();
+		else
+			$('.previous-button').show();
+					
+		if (page==$('.magazine').turn('pages'))
+			$('.next-button').hide();
+		else
+			$('.next-button').show();
 }
 
 // Set the width and height for the viewport
+
 function resizeViewport() {
+
 	var width = $(window).width(),
 		height = $(window).height(),
 		options = $('.magazine').turn('options');
@@ -114,9 +134,11 @@ function resizeViewport() {
 	$('.magazine-viewport').css({
 		width: width,
 		height: height
-	}).zoom('resize');
+	}).
+	zoom('resize');
 
-	if ($('.magazine').turn('zoom') == 1) {
+
+	if ($('.magazine').turn('zoom')==1) {
 		var bound = calculateBound({
 			width: options.width,
 			height: options.height,
@@ -124,14 +146,15 @@ function resizeViewport() {
 			boundHeight: Math.min(options.height, height)
 		});
 
-		if (bound.width % 2 !== 0)
-			bound.width -= 1;
+		if (bound.width%2!==0)
+			bound.width-=1;
 
-		if (bound.width != $('.magazine').width() || bound.height != $('.magazine').height()) {
+			
+		if (bound.width!=$('.magazine').width() || bound.height!=$('.magazine').height()) {
 
 			$('.magazine').turn('size', bound.width, bound.height);
 
-			if ($('.magazine').turn('page') == 1)
+			if ($('.magazine').turn('page')==1)
 				$('.magazine').turn('peel', 'br');
 
 			$('.next-button').css({height: bound.height, backgroundPosition: '-38px '+(bound.height/2-32/2)+'px'});
@@ -145,29 +168,33 @@ function resizeViewport() {
 		boundH = height - magazineOffset.top - $('.magazine').height(),
 		marginTop = (boundH - $('.thumbnails > div').height()) / 2;
 
-	if (marginTop < 0) {
+	if (marginTop<0) {
 		$('.thumbnails').css({height:1});
 	} else {
 		$('.thumbnails').css({height: boundH});
 		$('.thumbnails > div').css({marginTop: marginTop});
 	}
 
-	if (magazineOffset.top < $('.made').height())
+	if (magazineOffset.top<$('.made').height())
 		$('.made').hide();
 	else
 		$('.made').show();
 
 	$('.magazine').addClass('animated');
+	
 }
 
+
 // Number of views in a flipbook
+
 function numberOfViews(book) {
 	return book.turn('pages') / 2 + 1;
 }
 
 // Current view in a flipbook
+
 function getViewNumber(book, page) {
-	return parseInt((page || book.turn('page')) / 2 + 1, 10);
+	return parseInt((page || book.turn('page'))/2 + 1, 10);
 }
 
 function moveBar(yes) {
@@ -177,98 +204,80 @@ function moveBar(yes) {
 }
 
 function setPreview(view) {
+
 	var previewWidth = 112,
 		previewHeight = 73,
 		previewSrc = 'pages/preview.jpg',
 		preview = $(_thumbPreview.children(':first')),
-		numPages = (view == 1 || view == $('#slider').slider('option', 'max')) ? 1 : 2,
-		width = (numPages == 1) ? previewWidth / 2 : previewWidth;
+		numPages = (view==1 || view==$('#slider').slider('option', 'max')) ? 1 : 2,
+		width = (numPages==1) ? previewWidth/2 : previewWidth;
 
-	_thumbPreview.addClass('no-transition').css({
-		width: width + 15,
-		height: previewHeight + 15,
-		top: -previewHeight - 30,
-		left: ($($('#slider').children(':first')).width() - width - 15) / 2
-	});
+	_thumbPreview.
+		addClass('no-transition').
+		css({width: width + 15,
+			height: previewHeight + 15,
+			top: -previewHeight - 30,
+			left: ($($('#slider').children(':first')).width() - width - 15)/2
+		});
 
 	preview.css({
 		width: width,
 		height: previewHeight
 	});
 
-	if (preview.css('background-image') === '' ||
-		preview.css('background-image') == 'none') {
+	if (preview.css('background-image')==='' ||
+		preview.css('background-image')=='none') {
 
 		preview.css({backgroundImage: 'url(' + previewSrc + ')'});
 
 		setTimeout(function(){
 			_thumbPreview.removeClass('no-transition');
 		}, 0);
+
 	}
 
-	preview.css({backgroundPosition: '0px -'+((view-1)*previewHeight)+'px'});
+	preview.css({backgroundPosition:
+		'0px -'+((view-1)*previewHeight)+'px'
+	});
 }
 
-// Decode URL Parameters
+
+// decode URL Parameters
+
 function decodeParams(data) {
+
 	var parts = data.split('&'), d, obj = {};
 
-	for (var i = 0; i < parts.length; i++) {
+	for (var i =0; i<parts.length; i++) {
 		d = parts[i].split('=');
 		obj[decodeURIComponent(d[0])] = decodeURIComponent(d[1]);
 	}
+
 	return obj;
 }
 
 // Calculate the width and height of a square within another square
+
 function calculateBound(d) {
+	
 	var bound = {width: d.width, height: d.height};
 
-	if (bound.width > d.boundWidth || bound.height > d.boundHeight) {
-		var rel = bound.width / bound.height;
+	if (bound.width>d.boundWidth || bound.height>d.boundHeight) {
+		
+		var rel = bound.width/bound.height;
 
-		if (d.boundWidth / rel > d.boundHeight && d.boundHeight * rel <= d.boundWidth) {
-			bound.width = Math.round(d.boundHeight * rel);
+		if (d.boundWidth/rel>d.boundHeight && d.boundHeight*rel<=d.boundWidth) {
+			
+			bound.width = Math.round(d.boundHeight*rel);
 			bound.height = d.boundHeight;
+
 		} else {
+			
 			bound.width = d.boundWidth;
-			bound.height = Math.round(d.boundWidth / rel);
+			bound.height = Math.round(d.boundWidth/rel);
+		
 		}
 	}
+		
 	return bound;
 }
-
-// Código de la animación de "Turn Page"
-document.addEventListener("DOMContentLoaded", function() {
-    const grabText = document.querySelector('.grab-text');
-    const grabContainer = document.querySelector('.grab-container');
-
-    let repeatCount = 0;
-    const maxRepeats = 3;
-
-    // Intersection Observer para la animación al ver la sección
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && repeatCount < maxRepeats) {
-                grabText.style.animation = "moveGrab 1.5s ease-in-out forwards";
-
-                const handleAnimationEnd = () => {
-                    repeatCount++;
-                    if (repeatCount < maxRepeats) {
-                        grabText.style.animation = "none";
-                        setTimeout(() => {
-                            grabText.style.animation = "moveGrab 1.5s ease-in-out forwards";
-                        }, 150);
-                    } else {
-                        observer.unobserve(grabContainer);
-                        grabText.removeEventListener('animationend', handleAnimationEnd);
-                    }
-                };
-
-                grabText.addEventListener('animationend', handleAnimationEnd);
-            }
-        });
-    });
-
-    observer.observe(grabContainer);
-});
