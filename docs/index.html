@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0">
     <title>Review Artist/Designers</title>
 
     <script type="text/javascript" src="extras/jquery.min.1.7.js"></script> 
@@ -23,11 +23,6 @@
     </div>
 </div>
 
-<!-- Contenedor de animación de texto para "Turn Page" -->
-<div class="grab-container">
-    <span class="grab-text">Turn Page →</span>
-</div>
-
 <script type="text/javascript">
 function loadApp() {
     $('#canvas').fadeIn(1000);
@@ -40,22 +35,24 @@ function loadApp() {
     }
 
     // Function to set flipbook dimensions based on window width
-    function setFlipbookSize() {
-        let width, height;
-        
-        if (window.innerWidth <= 375) {
-            width = 320;
-            height = 200;
-        } else if (window.innerWidth <= 680) {
-            width = 360;
-            height = 220;
-        } else {
-            width = 922;
-            height = 600;
-        }
+function setFlipbookSize() {
+    let width, height;
+    
+    if (window.innerWidth <= 375) {   // Para dispositivos con ancho <= 375px
+        width = 320;
+        height = 200;
+    } else if (window.innerWidth <= 680) { // Para dispositivos entre 415px y 680px de ancho
+        width = 360;
+        height = 220;
+    } else { // Para dispositivos más grandes
+        width = 922;
+        height = 600;
+    }
+
         flipbook.turn('size', width, height);  // Adjust flipbook size dynamically
     }
 
+    // Initialize flipbook with responsive size
     flipbook.turn({
         width: 922,
         height: 600,
@@ -88,31 +85,47 @@ function loadApp() {
         }
     });
 
-    setFlipbookSize();
-    $(window).resize(setFlipbookSize);
+    setFlipbookSize(); // Set initial size
+    $(window).resize(setFlipbookSize); // Update size on window resize
+
+    // Resize viewport
     $(window).resize(function() {
         resizeViewport();
     }).bind('orientationchange', function() {
         resizeViewport();
     });
 
-    $(document).keydown(function(e){
-        var previous = 37, next = 39, esc = 27;
-        switch (e.keyCode) {
-            case previous:
-                $('.magazine').turn('previous');
-                e.preventDefault();
-                break;
-            case next:
-                $('.magazine').turn('next');
-                e.preventDefault();
-                break;
-            case esc:
-                $('.magazine-viewport').zoom('zoomOut');    
-                e.preventDefault();
-                break;
-        }
-    });
+    // Using arrow keys to turn the page
+
+	$(document).keydown(function(e){
+
+var previous = 37, next = 39, esc = 27;
+
+switch (e.keyCode) {
+    case previous:
+
+        // left arrow
+        $('.magazine').turn('previous');
+        e.preventDefault();
+
+    break;
+    case next:
+
+        //right arrow
+        $('.magazine').turn('next');
+        e.preventDefault();
+
+    break;
+    case esc:
+        
+        $('.magazine-viewport').zoom('zoomOut');	
+        e.preventDefault();
+
+    break;
+}
+});
+
+    // More flipbook setup...
 
     resizeViewport();
     $('.magazine').addClass('animated');
@@ -125,39 +138,6 @@ yepnope({
     nope: ['lib/turn.html4.min.js'],
     both: ['js/magazine.js', 'css/magazine.css'],
     complete: loadApp
-});
-
-// Animación de "Turn Page" al hacer scroll
-document.addEventListener("DOMContentLoaded", function() {
-    const grabText = document.querySelector('.grab-text');
-    const grabContainer = document.querySelector('.grab-container');
-    
-    let repeatCount = 0;
-    const maxRepeats = 3;
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && repeatCount < maxRepeats) {
-                grabText.style.animation = "moveGrab 1.5s ease-in-out forwards";
-                
-                const handleAnimationEnd = () => {
-                    repeatCount++;
-                    if (repeatCount < maxRepeats) {
-                        grabText.style.animation = "none";
-                        setTimeout(() => {
-                            grabText.style.animation = "moveGrab 1.5s ease-in-out forwards";
-                        }, 150);
-                    } else {
-                        observer.unobserve(grabContainer);
-                        grabText.removeEventListener('animationend', handleAnimationEnd);
-                    }
-                };
-                grabText.addEventListener('animationend', handleAnimationEnd);
-            }
-        });
-    });
-
-    observer.observe(grabContainer);
 });
 </script>
 
